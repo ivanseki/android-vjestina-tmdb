@@ -30,8 +30,7 @@ fun ActorCard(
     modifier: Modifier = Modifier,
 ) {
     Card(
-        modifier = Modifier
-            .size(width = 125.dp, height = 209.dp)
+        modifier = modifier
             .clip(RoundedCornerShape(10.dp)),
         elevation = CardDefaults.cardElevation(2.dp)
     ) {
@@ -39,8 +38,8 @@ fun ActorCard(
             AsyncImage(
                 model = item.imageUrl,
                 contentDescription = item.name,
-                modifier = modifier
-                    .height(136.dp),
+                modifier = Modifier
+                    .weight(0.7F),
                 contentScale = ContentScale.Crop
             )
 
@@ -49,20 +48,16 @@ fun ActorCard(
                 fontSize = 14.sp,
                 fontWeight = FontWeight.ExtraBold,
                 color = Color.Black,
-                modifier = modifier
+                modifier = Modifier
                     .padding(start = 5.dp, top = 5.dp)
-                    .width(87.dp)
-                    .height(35.dp)
             )
 
             Text(
                 text = item.character,
                 fontSize = 12.sp,
                 color = Color.Gray,
-                modifier = modifier
-                    .padding(start = 5.dp, top = 0.dp)
-                    .width(110.dp)
-                    .height(40.dp)
+                modifier = Modifier
+                    .padding(start = 5.dp, top = 0.dp, end = 5.dp, bottom = 5.dp)
             )
         }
     }
@@ -78,5 +73,9 @@ private fun ActorCardPreview() {
         character = actor.character
     )
 
-    ActorCard(item = item)
+    val actorCardModifier = Modifier
+        .height(209.dp)
+        .width(125.dp)
+
+    ActorCard(modifier = actorCardModifier, item = item)
 }

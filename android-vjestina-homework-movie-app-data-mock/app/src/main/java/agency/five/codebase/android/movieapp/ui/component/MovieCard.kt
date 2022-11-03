@@ -14,17 +14,22 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 
+data class MovieCardViewState(
+    val imageUrl: String?,
+    val title: String
+)
+
+fun onMovieCardClick() { }
+
 @Composable
 fun Moviecard(
-    item: Movie,
+    item: MovieCardViewState,
     modifier: Modifier = Modifier,
-    onMovieItemClick: () -> Unit = {}
+    onClick: () -> Unit = {}
 ) {
     Card(
         modifier = modifier
-            .width(122.dp)
-            .height(179.dp)
-            .clickable { onMovieItemClick() },
+            .clickable { onClick() },
         shape = RoundedCornerShape(10.dp),
         elevation = CardDefaults.cardElevation(2.dp)
     ) {
@@ -36,8 +41,11 @@ fun Moviecard(
             )
 
             FavoriteButton(
-                modifier = modifier
+                modifier = Modifier
                     .padding(9.dp)
+                    .size(30.dp),
+                isFavourite = true,
+                onClick = {}
             )
         }
     }
@@ -47,5 +55,13 @@ fun Moviecard(
 @Composable
 private fun MovieCardPreview() {
     val movie = MoviesMock.getMoviesList()[0]
-    Moviecard(item = movie)
+    val movieCardViewState = MovieCardViewState(imageUrl = movie.imageUrl, title = movie.title)
+
+    val movieCardModifier = Modifier
+        .width(122.dp)
+        .height(179.dp)
+
+    Moviecard(item = movieCardViewState,
+        modifier = movieCardModifier,
+        onClick = { onMovieCardClick() })
 }

@@ -7,6 +7,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -16,28 +17,30 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
+fun onFavButtonClick() { }
+
 @Composable
 fun FavoriteButton(
     modifier: Modifier = Modifier,
-    contentDescription: String = "Favourite button"
+    isFavourite: Boolean,
+    onClick: () -> Unit,
 ) {
-    val favourite = remember { mutableStateOf(false) }
-
     Image(
-        painter = painterResource(id = if(favourite.value) R.drawable.ic_favorite_filled else R.drawable.ic_favorite_outlined),
-        contentDescription = contentDescription,
+        painter = painterResource(id = if(isFavourite) R.drawable.ic_favorite_filled else R.drawable.ic_favorite_outlined),
+        contentDescription = null,
         modifier = modifier
-            .clickable {
-                favourite.value = favourite.value.not()
-            }
-            .size(width = 32.dp, height = 32.dp)
+            .clickable { onClick() }
             .background(Blue, CircleShape)
-            .padding(top = 8.dp, start = 5.dp, end = 5.dp, bottom = 5.dp)
+            .wrapContentSize()
     )
 }
 
 @Preview
 @Composable
 private fun FavoriteButtonPreview() {
-    FavoriteButton()
+    val favouriteButtonModifier = Modifier
+        .padding(2.dp)
+        .size(30.dp)
+
+    FavoriteButton(modifier = favouriteButtonModifier, isFavourite = true, onClick = { onFavButtonClick()})
 }
