@@ -19,13 +19,12 @@ data class MovieCardViewState(
     val title: String
 )
 
-fun onMovieCardClick() { }
-
 @Composable
-fun Moviecard(
+fun MovieCard(
     item: MovieCardViewState,
     modifier: Modifier = Modifier,
-    onClick: () -> Unit = {}
+    onClick: () -> Unit = {},
+    onFavouriteButtonClick: () -> Unit
 ) {
     Card(
         modifier = modifier
@@ -45,7 +44,7 @@ fun Moviecard(
                     .padding(9.dp)
                     .size(30.dp),
                 isFavourite = true,
-                onClick = {}
+                onClick = { onFavouriteButtonClick() }
             )
         }
     }
@@ -61,7 +60,8 @@ private fun MovieCardPreview() {
         .width(122.dp)
         .height(179.dp)
 
-    Moviecard(item = movieCardViewState,
+    MovieCard(item = movieCardViewState,
         modifier = movieCardModifier,
-        onClick = { onMovieCardClick() })
+        onClick = { },
+        onFavouriteButtonClick = { })
 }

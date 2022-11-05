@@ -27,8 +27,6 @@ sealed class MovieCategoryLabelTextViewState{
     class ResourceText(@StringRes val textRes: Int): MovieCategoryLabelTextViewState()
 }
 
-fun onMovieCategoryLabelClick() { }
-
 @Composable
 fun selectTextSource(movieCategoryLabelViewState: MovieCategoryLabelViewState): String{
     return when(val categoryText = movieCategoryLabelViewState.categoryText) {
@@ -85,13 +83,11 @@ fun MovieCategoryLabel(
 @Composable
 fun MovieCategoryLabelPreview(){
     val inputText = MovieCategoryLabelTextViewState.InputText("Action")
-    val stringRes = MovieCategoryLabelTextViewState.ResourceText(R.string.sf)
+    val stringRes = MovieCategoryLabelTextViewState.ResourceText(R.string.app_name)
     val categoryViewState1 = MovieCategoryLabelViewState(0, true, stringRes)
     val categoryViewState2 = MovieCategoryLabelViewState(1, false, inputText)
     Row{
-        MovieCategoryLabel(item = categoryViewState1,
-            { onMovieCategoryLabelClick() })
-        MovieCategoryLabel(item = categoryViewState2,
-            { onMovieCategoryLabelClick() })
+        MovieCategoryLabel(item = categoryViewState1, { })
+        MovieCategoryLabel(item = categoryViewState2, { })
     }
 }

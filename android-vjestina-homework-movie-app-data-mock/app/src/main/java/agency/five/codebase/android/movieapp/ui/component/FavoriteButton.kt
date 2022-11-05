@@ -17,8 +17,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
-fun onFavButtonClick() { }
-
 @Composable
 fun FavoriteButton(
     modifier: Modifier = Modifier,
@@ -42,5 +40,5 @@ private fun FavoriteButtonPreview() {
         .padding(2.dp)
         .size(30.dp)
 
-    FavoriteButton(modifier = favouriteButtonModifier, isFavourite = true, onClick = { onFavButtonClick()})
+    FavoriteButton(modifier = favouriteButtonModifier, isFavourite = true, onClick = { })
 }

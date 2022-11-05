@@ -19,7 +19,9 @@ fun CrewItem(
     item: CrewItemViewState,
     modifier: Modifier = Modifier
 ) {
-    Column() {
+    Column(
+        modifier = modifier
+    ) {
         Text(
             text = item.name,
             fontSize = 14.sp,
