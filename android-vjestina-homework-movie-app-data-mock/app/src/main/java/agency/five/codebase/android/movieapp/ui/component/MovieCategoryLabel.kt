@@ -44,7 +44,6 @@ fun MovieCategoryLabel(
     if (item.isSelected) {
         Column(
             modifier = modifier
-                .padding(5.dp)
                 .width(intrinsicSize = IntrinsicSize.Max)
                 .clickable(onClick = onClick)
         ) {
@@ -73,7 +72,6 @@ fun MovieCategoryLabel(
             color = Color.Gray,
             fontSize = 16.sp,
             modifier = modifier
-                .padding(5.dp)
                 .clickable(onClick = onClick)
         )
     }
