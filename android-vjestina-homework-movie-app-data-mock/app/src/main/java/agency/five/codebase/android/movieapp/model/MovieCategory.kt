@@ -8,5 +8,5 @@ enum class MovieCategory {
     NOW_PLAYING_MOVIES,
     NOW_PLAYING_TV,
     UPCOMING_TODAY,
-    UPCOMING_THIS_WEEK
+    UPCOMING_THIS_WEEK;
 }

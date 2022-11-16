@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">MovieApp</string>
     <string name="favorites">Favorites</string>
+    <string name="home">Home</string>
     <string name="user_score">User Score</string>
     <string name="overview">Overview</string>
     <string name="top_billed_cast">Top Billed Cast</string>

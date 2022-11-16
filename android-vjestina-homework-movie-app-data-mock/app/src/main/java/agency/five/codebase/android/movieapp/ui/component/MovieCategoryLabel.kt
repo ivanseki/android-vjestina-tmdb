@@ -38,14 +38,14 @@ fun selectTextSource(movieCategoryLabelViewState: MovieCategoryLabelViewState): 
 @Composable
 fun MovieCategoryLabel(
     item: MovieCategoryLabelViewState,
-    onClick: () -> Unit,
+    onClick: (MovieCategoryLabelViewState) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     if (item.isSelected) {
         Column(
             modifier = modifier
                 .width(intrinsicSize = IntrinsicSize.Max)
-                .clickable(onClick = onClick)
+                .clickable {onClick(item)}
         ) {
             Text(
                 text = selectTextSource(movieCategoryLabelViewState = item),
@@ -72,12 +72,12 @@ fun MovieCategoryLabel(
             color = Color.Gray,
             fontSize = 16.sp,
             modifier = modifier
-                .clickable(onClick = onClick)
+                .clickable {onClick(item)}
         )
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun MovieCategoryLabelPreview(){
     val inputText = MovieCategoryLabelTextViewState.InputText("Action")
