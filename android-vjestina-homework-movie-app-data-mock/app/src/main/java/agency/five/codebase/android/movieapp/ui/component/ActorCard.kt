@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 
 data class ActorCardViewState(
+    val id: Int,
     val name: String,
     val character: String,
     val imageUrl: String?
@@ -67,6 +68,7 @@ fun ActorCard(
 private fun ActorCardPreview() {
     val actor = MoviesMock.getActor()
     val item = ActorCardViewState(
+        id = actor.id,
         name = actor.name,
         imageUrl = actor.imageUrl,
         character = actor.character

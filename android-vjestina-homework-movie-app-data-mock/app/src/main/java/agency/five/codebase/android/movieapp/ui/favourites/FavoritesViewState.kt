@@ -1,11 +1,7 @@
 package agency.five.codebase.android.movieapp.ui.favourites
 
-data class FavoritesMovieViewState(
-    val id: Int,
-    val imageUrl: String?,
-    val isFavorite: Boolean
-)
+import agency.five.codebase.android.movieapp.ui.component.MovieCardViewState
 
 data class FavoritesViewState(
-    val favoriteMovies: List<FavoritesMovieViewState>
+    val favoriteMovies: List<MovieCardViewState>
 )

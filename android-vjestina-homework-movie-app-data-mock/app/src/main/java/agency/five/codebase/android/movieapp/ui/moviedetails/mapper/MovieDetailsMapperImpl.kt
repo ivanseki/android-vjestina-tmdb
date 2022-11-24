@@ -1,13 +1,11 @@
 package agency.five.codebase.android.movieapp.ui.moviedetails.mapper
 
-import agency.five.codebase.android.movieapp.model.Actor
-import agency.five.codebase.android.movieapp.model.Crewman
 import agency.five.codebase.android.movieapp.model.MovieDetails
-import agency.five.codebase.android.movieapp.ui.moviedetails.ActorViewState
+import agency.five.codebase.android.movieapp.ui.component.ActorCardViewState
 import agency.five.codebase.android.movieapp.ui.moviedetails.CrewmanViewState
 import agency.five.codebase.android.movieapp.ui.moviedetails.MovieDetailsViewState
 
-class MovieDetailsMapperImpl : IMovieDetailsMapper {
+class MovieDetailsMapperImpl : MovieDetailsMapper {
     override fun toMovieDetailsViewState(movieDetails: MovieDetails): MovieDetailsViewState {
         return MovieDetailsViewState(
             id = movieDetails.movie.id,
@@ -16,37 +14,27 @@ class MovieDetailsMapperImpl : IMovieDetailsMapper {
             title = movieDetails.movie.title,
             overview = movieDetails.movie.overview,
             isFavorite = movieDetails.movie.isFavorite,
-            crew = movieDetails.crew.map {
-                crewman -> CrewmanViewState(
-                    id = crewman.id,
-                    name = crewman.name,
-                    job = crewman.job
-                )},
-            cast = movieDetails.cast.map {
-                actor ->  ActorViewState(
-                    id = actor.id,
-                    name = actor.name,
-                    character = actor.character,
-                    imageUrl = actor.imageUrl
-                )
-            }
+            crew = toCrewmanViewState(movieDetails),
+            cast = toActorViewState(movieDetails)
         )
     }
 
-    override fun toCrewmanViewState(crewman: Crewman): CrewmanViewState {
-        return CrewmanViewState(
-            crewman.id,
-            crewman.name,
-            crewman.job
-        )
-    }
+    private fun toCrewmanViewState(movieDetails: MovieDetails) =
+        movieDetails.crew.map { crewman ->
+            CrewmanViewState(
+                id = crewman.id,
+                name = crewman.name,
+                job = crewman.job
+            )
+        }
 
-    override fun toActorViewState(actor: Actor): ActorViewState {
-        return ActorViewState(
-            actor.id,
-            actor.name,
-            actor.character,
-            actor.imageUrl
-        )
-    }
+    private fun toActorViewState(movieDetails: MovieDetails) =
+        movieDetails.cast.map { actor ->
+            ActorCardViewState(
+                id = actor.id,
+                name = actor.name,
+                character = actor.character,
+                imageUrl = actor.imageUrl
+            )
+        }
 }

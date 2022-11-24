@@ -22,14 +22,14 @@ data class MovieCategoryLabelViewState(
     val categoryText: MovieCategoryLabelTextViewState
 )
 
-sealed class MovieCategoryLabelTextViewState{
-    class InputText(val text: String): MovieCategoryLabelTextViewState()
-    class ResourceText(@StringRes val textRes: Int): MovieCategoryLabelTextViewState()
+sealed class MovieCategoryLabelTextViewState {
+    class InputText(val text: String) : MovieCategoryLabelTextViewState()
+    class ResourceText(@StringRes val textRes: Int) : MovieCategoryLabelTextViewState()
 }
 
 @Composable
-fun selectTextSource(movieCategoryLabelViewState: MovieCategoryLabelViewState): String{
-    return when(val categoryText = movieCategoryLabelViewState.categoryText) {
+fun selectTextSource(movieCategoryLabelViewState: MovieCategoryLabelViewState): String {
+    return when (val categoryText = movieCategoryLabelViewState.categoryText) {
         is MovieCategoryLabelTextViewState.InputText -> categoryText.text
         is MovieCategoryLabelTextViewState.ResourceText -> stringResource(id = categoryText.textRes)
     }
@@ -45,7 +45,7 @@ fun MovieCategoryLabel(
         Column(
             modifier = modifier
                 .width(intrinsicSize = IntrinsicSize.Max)
-                .clickable {onClick(item)}
+                .clickable { onClick(item) }
         ) {
             Text(
                 text = selectTextSource(movieCategoryLabelViewState = item),
@@ -56,11 +56,13 @@ fun MovieCategoryLabel(
                     .fillMaxWidth()
             )
 
-            Spacer(modifier = Modifier
-                .size(2.dp)
+            Spacer(
+                modifier = Modifier
+                    .size(2.dp)
             )
 
-            Divider(color = Color.Black,
+            Divider(
+                color = Color.Black,
                 thickness = 3.dp,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -72,19 +74,19 @@ fun MovieCategoryLabel(
             color = Color.Gray,
             fontSize = 16.sp,
             modifier = modifier
-                .clickable {onClick(item)}
+                .clickable { onClick(item) }
         )
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun MovieCategoryLabelPreview(){
+fun MovieCategoryLabelPreview() {
     val inputText = MovieCategoryLabelTextViewState.InputText("Action")
     val stringRes = MovieCategoryLabelTextViewState.ResourceText(R.string.app_name)
     val categoryViewState1 = MovieCategoryLabelViewState(0, true, stringRes)
     val categoryViewState2 = MovieCategoryLabelViewState(1, false, inputText)
-    Row{
+    Row {
         MovieCategoryLabel(item = categoryViewState1, { })
         MovieCategoryLabel(item = categoryViewState2, { })
     }

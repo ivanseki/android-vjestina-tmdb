@@ -3,7 +3,7 @@ package agency.five.codebase.android.movieapp.ui.moviedetails
 import agency.five.codebase.android.movieapp.R
 import agency.five.codebase.android.movieapp.mock.MoviesMock
 import agency.five.codebase.android.movieapp.ui.component.*
-import agency.five.codebase.android.movieapp.ui.moviedetails.mapper.IMovieDetailsMapper
+import agency.five.codebase.android.movieapp.ui.moviedetails.mapper.MovieDetailsMapper
 import agency.five.codebase.android.movieapp.ui.moviedetails.mapper.MovieDetailsMapperImpl
 import agency.five.codebase.android.movieapp.ui.theme.spacing
 import androidx.compose.foundation.layout.*
@@ -31,14 +31,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 
-private val movieDetailsMapper: IMovieDetailsMapper = MovieDetailsMapperImpl()
+private val movieDetailsMapper: MovieDetailsMapper = MovieDetailsMapperImpl()
 
 val movieDetailsViewState = movieDetailsMapper.toMovieDetailsViewState(MoviesMock.getMovieDetails())
 
 @Composable
 fun MovieDetailsRoute() {
-    //val movieDetailsViewState by remember { mutableStateOf(movieDetailsViewState) }
-    val movieDetailsViewState: MovieDetailsViewState = movieDetailsViewState
+    val movieDetailsViewState by remember { mutableStateOf(movieDetailsViewState) }
 
     MovieDetailsScreen(
         movieDetailsViewState = movieDetailsViewState
@@ -55,7 +54,10 @@ fun MovieDetailsScreen(
             .verticalScroll(state = rememberScrollState())
     ) {
         MovieDetailsHeader(
-            movieDetailsViewState = movieDetailsViewState
+            imageUrl = movieDetailsViewState.imageUrl,
+            voteAverage = movieDetailsViewState.voteAverage,
+            title = movieDetailsViewState.title,
+            isFavorite = movieDetailsViewState.isFavorite
         )
 
         Spacer(
@@ -64,7 +66,7 @@ fun MovieDetailsScreen(
         )
 
         MovieDetailsOverview(
-            movieDetailsViewState = movieDetailsViewState
+            overview = movieDetailsViewState.overview
         )
 
         Spacer(
@@ -73,7 +75,7 @@ fun MovieDetailsScreen(
         )
 
         MovieDetailsCrew(
-            movieDetailsViewState = movieDetailsViewState
+            crew = movieDetailsViewState.crew
         )
 
         Spacer(
@@ -82,7 +84,7 @@ fun MovieDetailsScreen(
         )
 
         MovieDetailsCast(
-            movieDetailsViewState = movieDetailsViewState
+            cast = movieDetailsViewState.cast
         )
     }
 }
@@ -91,23 +93,28 @@ fun MovieDetailsScreen(
 fun MovieDetailsHeader(
     modifier: Modifier = Modifier
         .fillMaxWidth(),
-    movieDetailsViewState: MovieDetailsViewState
+    imageUrl: String?,
+    voteAverage: Float,
+    title: String,
+    isFavorite: Boolean
 ) {
     Box(
         modifier = modifier,
     ) {
         AsyncImage(
-            model = movieDetailsViewState.imageUrl,
-            contentDescription = movieDetailsViewState.title,
+            model = imageUrl,
+            contentDescription = title,
             contentScale = ContentScale.Crop,
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxWidth()
+                .height(350.dp)
+                .align(Alignment.TopCenter)
         )
 
         Column(
             modifier = Modifier
-                .fillMaxSize(),
-            verticalArrangement = Arrangement.Bottom,
+                .fillMaxSize()
+                .align(Alignment.BottomCenter)
         ) {
             Row(
                 modifier = Modifier
@@ -116,7 +123,7 @@ fun MovieDetailsHeader(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 UserScoreProgressBar(
-                    score = movieDetailsViewState.voteAverage
+                    score = voteAverage
                 )
 
                 Text(
@@ -135,9 +142,9 @@ fun MovieDetailsHeader(
             )
 
             Text(
-                text = movieDetailsViewState.title,
                 modifier = Modifier
                     .padding(start = MaterialTheme.spacing.medium),
+                text = title,
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.White
@@ -149,13 +156,13 @@ fun MovieDetailsHeader(
             )
 
             FavoriteButton(
-                isFavourite = movieDetailsViewState.isFavorite,
                 modifier = Modifier
                     .padding(
                         start = MaterialTheme.spacing.medium,
                         bottom = MaterialTheme.spacing.medium
                     )
                     .size(30.dp),
+                isFavourite = isFavorite,
                 onClick = { }
             )
         }
@@ -165,20 +172,15 @@ fun MovieDetailsHeader(
 @Composable
 fun MovieDetailsOverview(
     modifier: Modifier = Modifier,
-    movieDetailsViewState: MovieDetailsViewState
+    overview: String
 ) {
     Column(
         modifier = modifier
             .fillMaxWidth()
             .padding(start = MaterialTheme.spacing.medium, end = MaterialTheme.spacing.medium)
     ) {
-        Text(
-            text = stringResource(id = R.string.overview),
-            maxLines = 1,
-            modifier = Modifier
-                .fillMaxWidth(),
-            fontSize = 18.sp,
-            fontWeight = FontWeight.Bold
+        MovieDetailsSectionHeader(
+            textId = R.string.overview
         )
 
         Spacer(
@@ -187,10 +189,10 @@ fun MovieDetailsOverview(
         )
 
         Text(
-            text = movieDetailsViewState.overview,
-            maxLines = 7,
             modifier = Modifier
                 .fillMaxWidth(),
+            text = overview,
+            maxLines = 7,
             fontSize = 14.sp
         )
     }
@@ -199,7 +201,7 @@ fun MovieDetailsOverview(
 @Composable
 fun MovieDetailsCrew(
     modifier: Modifier = Modifier,
-    movieDetailsViewState: MovieDetailsViewState
+    crew: List<CrewmanViewState>
 ) {
     Column(
         modifier = modifier
@@ -212,7 +214,7 @@ fun MovieDetailsCrew(
             userScrollEnabled = false
         ) {
             items(
-                items = movieDetailsViewState.crew,
+                items = crew,
                 key = { crewman -> crewman.id }
             ) { crewman ->
                 CrewItem(
@@ -229,19 +231,14 @@ fun MovieDetailsCrew(
 @Composable
 fun MovieDetailsCast(
     modifier: Modifier = Modifier,
-    movieDetailsViewState: MovieDetailsViewState
+    cast: List<ActorCardViewState>
 ) {
     Column(
         modifier = modifier
             .padding(start = MaterialTheme.spacing.medium, end = MaterialTheme.spacing.medium)
     ) {
-        Text(
-            text = stringResource(id = R.string.top_billed_cast),
-            maxLines = 1,
-            modifier = Modifier
-                .fillMaxWidth(),
-            fontSize = 18.sp,
-            fontWeight = FontWeight.Bold
+        MovieDetailsSectionHeader(
+            textId = R.string.top_billed_cast
         )
 
         Spacer(
@@ -250,14 +247,16 @@ fun MovieDetailsCast(
         )
 
         LazyRow(
-            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium)
+            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium),
+            userScrollEnabled = true
         ) {
             items(
-                items = movieDetailsViewState.cast,
+                items = cast,
                 key = { actor -> actor.id }
             ) { actor ->
                 ActorCard(
                     item = ActorCardViewState(
+                        actor.id,
                         actor.name,
                         actor.character,
                         actor.imageUrl
@@ -268,16 +267,23 @@ fun MovieDetailsCast(
     }
 }
 
+@Composable
+fun MovieDetailsSectionHeader(
+    modifier: Modifier = Modifier,
+    textId: Int
+) {
+    Text(
+        modifier = modifier
+            .fillMaxWidth(),
+        text = stringResource(id = textId),
+        maxLines = 1,
+        fontSize = 18.sp,
+        fontWeight = FontWeight.Bold
+    )
+}
+
 @Preview(showBackground = false)
 @Composable
 private fun MovieDetailsScreenPreview() {
     MovieDetailsScreen(movieDetailsViewState = movieDetailsViewState)
-
-    //MovieDetailsHeader(movieDetailsViewState = movieDetailsViewState)
-
-    //MovieDetailsOverview(movieDetailsViewState = movieDetailsViewState)
-
-    //MovieDetailsCrew(movieDetailsViewState = movieDetailsViewState)
-
-    //MovieDetailsCast(movieDetailsViewState = movieDetailsViewState)
 }

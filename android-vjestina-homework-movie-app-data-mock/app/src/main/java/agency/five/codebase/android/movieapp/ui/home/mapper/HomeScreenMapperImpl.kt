@@ -8,22 +8,23 @@ import agency.five.codebase.android.movieapp.ui.component.MovieCategoryLabelView
 import agency.five.codebase.android.movieapp.ui.home.HomeMovieCategoryViewState
 import agency.five.codebase.android.movieapp.ui.home.HomeMovieViewState
 
-class HomeScreenMapperImpl : IHomeScreenMapper {
+class HomeScreenMapperImpl : HomeScreenMapper {
     override fun toHomeMovieCategoryViewState(
         movieCategories: List<MovieCategory>,
         selectedMovieCategory: MovieCategory,
         movies: List<Movie>
     ): HomeMovieCategoryViewState {
-        return HomeMovieCategoryViewState(movieCategories.map {
-            movieCategory -> MovieCategoryLabelViewState(
+        return HomeMovieCategoryViewState(movieCategories.map { movieCategory ->
+            MovieCategoryLabelViewState(
                 itemId = movieCategory.ordinal,
                 isSelected = movieCategory == selectedMovieCategory,
                 categoryText = MovieCategoryLabelTextViewState.ResourceText(
                     getMovieCategoryStringResource(movieCategory)
                 )
-            ) },
-            movies.map {
-                movie -> HomeMovieViewState(
+            )
+        },
+            movies.map { movie ->
+                HomeMovieViewState(
                     id = movie.id,
                     imageUrl = movie.imageUrl,
                     isFavorite = movie.isFavorite
@@ -32,8 +33,8 @@ class HomeScreenMapperImpl : IHomeScreenMapper {
         )
     }
 
-    private fun getMovieCategoryStringResource(category: MovieCategory): Int{
-        return when(category) {
+    private fun getMovieCategoryStringResource(category: MovieCategory): Int =
+        when (category) {
             MovieCategory.POPULAR_STREAMING -> R.string.streaming
             MovieCategory.POPULAR_ON_TV -> R.string.on_tv
             MovieCategory.POPULAR_FOR_RENT -> R.string.for_rent
@@ -43,5 +44,4 @@ class HomeScreenMapperImpl : IHomeScreenMapper {
             MovieCategory.UPCOMING_TODAY -> R.string.today
             MovieCategory.UPCOMING_THIS_WEEK -> R.string.this_week
         }
-    }
 }

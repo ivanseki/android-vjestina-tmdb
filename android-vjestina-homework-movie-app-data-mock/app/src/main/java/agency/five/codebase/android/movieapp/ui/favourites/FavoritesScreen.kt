@@ -5,7 +5,7 @@ import agency.five.codebase.android.movieapp.mock.MoviesMock.getMoviesList
 import agency.five.codebase.android.movieapp.ui.component.MovieCard
 import agency.five.codebase.android.movieapp.ui.component.MovieCardViewState
 import agency.five.codebase.android.movieapp.ui.favourites.mapper.FavoritesMapperImpl
-import agency.five.codebase.android.movieapp.ui.favourites.mapper.IFavoritesMapper
+import agency.five.codebase.android.movieapp.ui.favourites.mapper.FavoritesMapper
 import agency.five.codebase.android.movieapp.ui.theme.MovieAppTheme
 import agency.five.codebase.android.movieapp.ui.theme.spacing
 import androidx.compose.foundation.layout.*
@@ -26,13 +26,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 
 
-private val favoritesMapper: IFavoritesMapper = FavoritesMapperImpl()
+private val favoritesMapper: FavoritesMapper = FavoritesMapperImpl()
 
 val favoritesViewState = favoritesMapper.toFavoritesState(getMoviesList().filter { it.isFavorite })
 
 @Composable
 fun FavoritesRoute(
-    onNavigateToMovieDetails: (FavoritesMovieViewState) -> Unit
+    onNavigateToMovieDetails: (MovieCardViewState) -> Unit
 ) {
     val favoritesViewState by remember { mutableStateOf(favoritesViewState) }
 
@@ -46,45 +46,41 @@ fun FavoritesRoute(
 fun FavoritesScreen(
     modifier: Modifier = Modifier,
     favoritesViewState: FavoritesViewState,
-    onNavigateToMovieDetails: (FavoritesMovieViewState) -> Unit
+    onNavigateToMovieDetails: (MovieCardViewState) -> Unit
 ) {
-    Column(
-        modifier = modifier
-            .fillMaxSize()
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(3),
+        contentPadding = PaddingValues(horizontal = MaterialTheme.spacing.medium),
+        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small),
+        verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium)
     ) {
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(3),
-            contentPadding = PaddingValues(horizontal = MaterialTheme.spacing.medium),
-            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small),
-            verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium)
+        item(
+            span = { GridItemSpan(maxLineSpan) }
         ) {
-            item(
-                span = { GridItemSpan(maxLineSpan) }
-            ) {
-                Text(text = stringResource(R.string.favorites),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(
-                            top = MaterialTheme.spacing.medium
-                        ),
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold
-                )
-            }
+            Text(
+                text = stringResource(R.string.favorites),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        top = MaterialTheme.spacing.medium
+                    ),
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold
+            )
+        }
 
-            items(
-                items = favoritesViewState.favoriteMovies,
-                key = { movie -> movie.id}
-            ) {
-                movie -> MovieCard(
+        items(
+            items = favoritesViewState.favoriteMovies,
+            key = { movie -> movie.id }
+        ) { movie ->
+            MovieCard(
                 item = MovieCardViewState(
                     id = movie.id,
                     imageUrl = movie.imageUrl,
                     isFavorite = movie.isFavorite
                 ),
                 onClick = { onNavigateToMovieDetails(movie) }
-                ) { }
-            }
+            ) { }
         }
     }
 }

@@ -8,7 +8,7 @@ import agency.five.codebase.android.movieapp.ui.component.MovieCardViewState
 import agency.five.codebase.android.movieapp.ui.component.MovieCategoryLabel
 import agency.five.codebase.android.movieapp.ui.component.MovieCategoryLabelViewState
 import agency.five.codebase.android.movieapp.ui.home.mapper.HomeScreenMapperImpl
-import agency.five.codebase.android.movieapp.ui.home.mapper.IHomeScreenMapper
+import agency.five.codebase.android.movieapp.ui.home.mapper.HomeScreenMapper
 import agency.five.codebase.android.movieapp.ui.theme.MovieAppTheme
 import agency.five.codebase.android.movieapp.ui.theme.spacing
 import androidx.compose.foundation.layout.*
@@ -25,7 +25,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 
-private val homeScreenMapper: IHomeScreenMapper = HomeScreenMapperImpl()
+private val homeScreenMapper: HomeScreenMapper = HomeScreenMapperImpl()
 
 val popularCategoryViewState = homeScreenMapper.toHomeMovieCategoryViewState(
     movieCategories = listOf(
@@ -119,6 +119,11 @@ fun HomeScreen(
         modifier = modifier
             .verticalScroll(state = rememberScrollState())
     ) {
+        Spacer(
+            modifier = Modifier
+                .height(MaterialTheme.spacing.medium)
+        )
+
         HomeScreenCategory(
             homeMovieCategoryViewState = popularCategoryViewState,
             categoryName = R.string.whats_popular,

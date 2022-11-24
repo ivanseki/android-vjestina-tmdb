@@ -4,7 +4,7 @@ import agency.five.codebase.android.movieapp.model.Movie
 import agency.five.codebase.android.movieapp.model.MovieCategory
 import agency.five.codebase.android.movieapp.ui.home.HomeMovieCategoryViewState
 
-interface IHomeScreenMapper {
+interface HomeScreenMapper {
     fun toHomeMovieCategoryViewState(
         movieCategories: List<MovieCategory>,
         selectedMovieCategory: MovieCategory,

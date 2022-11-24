@@ -7,10 +7,6 @@ import agency.five.codebase.android.movieapp.ui.favourites.FavoritesRoute
 import agency.five.codebase.android.movieapp.ui.home.HomeRoute
 import agency.five.codebase.android.movieapp.ui.moviedetails.MovieDetailsRoute
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.*
@@ -26,6 +22,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import agency.five.codebase.android.movieapp.R
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -64,7 +61,6 @@ fun MainScreen() {
                         NavigationItem.HomeDestination,
                         NavigationItem.FavoritesDestination,
                     ),
-                    // your code goes here ...
                     onNavigateToDestination = {
                         navController.navigate(it.route) {
                             popUpTo(navController.graph.findStartDestination().id) {
@@ -126,17 +122,19 @@ private fun TopBar(
         backgroundColor = MaterialTheme.colorScheme.primary,
         contentColor = MaterialTheme.colorScheme.onPrimary,
         modifier = Modifier
-            .fillMaxHeight(0.07f)
+            .wrapContentHeight()
     ) {
         Box(
             modifier = Modifier
-                .fillMaxSize(1f),
-            contentAlignment = Alignment.Center,
+                .fillMaxWidth(),
         ) {
             Image(
                 painter = painterResource(id = R.drawable.tmdb_logo),
                 contentDescription = null,
+                modifier = Modifier
+                    .align(Alignment.Center)
             )
+
             if (navigationIcon != null) {
                 navigationIcon()
             }
@@ -146,22 +144,17 @@ private fun TopBar(
 
 @Composable
 private fun BackIcon(
-    onBackClick: () -> Unit,
-    modifier: Modifier = Modifier,
+    onBackClick: () -> Unit
 ) {
-    Box(
-        modifier = modifier
-            .fillMaxSize(1f),
-        contentAlignment = Alignment.CenterStart
-    ) {
-        Icon(
-            painter = painterResource(id = R.drawable.back_icon),
-            contentDescription = null,
-            modifier = Modifier
-                .padding(8.dp)
-                .clickable(onClick = onBackClick)
-        )
-    }
+    Icon(
+        modifier = Modifier
+            .padding(8.dp)
+            .clickable(onClick = onBackClick)
+            .width(12.dp)
+            .height(20.dp),
+        painter = painterResource(id = R.drawable.back_icon),
+        contentDescription = null
+    )
 }
 
 @Composable
