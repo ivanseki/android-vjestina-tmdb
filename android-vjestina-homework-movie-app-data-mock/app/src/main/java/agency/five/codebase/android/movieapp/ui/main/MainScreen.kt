@@ -167,12 +167,13 @@ private fun BottomNavigationBar(
         backgroundColor = MaterialTheme.colorScheme.background
     ) {
         destinations.forEach { destination ->
+            val isSelected = currentDestination?.route == destination.route
             BottomNavigationItem(
-                selected = currentDestination?.route == destination.route,
+                selected = isSelected,
                 icon = {
                     Icon(
                         painter = painterResource(
-                            id = if (currentDestination?.route == destination.route)
+                            id = if (isSelected)
                                 destination.selectedIconId
                             else destination.unselectedIconId
                         ),
