@@ -8,9 +8,6 @@ import agency.five.codebase.android.movieapp.ui.moviedetails.mapper.MovieDetails
 import agency.five.codebase.android.movieapp.ui.theme.spacing
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -85,6 +82,11 @@ fun MovieDetailsScreen(
 
         MovieDetailsCast(
             cast = movieDetailsViewState.cast
+        )
+
+        Spacer(
+            modifier = Modifier
+                .height(MaterialTheme.spacing.medium)
         )
     }
 }
@@ -203,28 +205,51 @@ fun MovieDetailsCrew(
     modifier: Modifier = Modifier,
     crew: List<CrewmanViewState>
 ) {
-    Column(
-        modifier = modifier
-            .heightIn(min = 50.dp, max = 400.dp)
-            .padding(start = MaterialTheme.spacing.medium, end = MaterialTheme.spacing.medium)
+    Row(
+        modifier = modifier,
+        horizontalArrangement = Arrangement.SpaceAround
     ) {
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(3),
-            verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium),
-            userScrollEnabled = false
-        ) {
-            items(
-                items = crew,
-                key = { crewman -> crewman.id }
-            ) { crewman ->
-                CrewItem(
-                    item = CrewItemViewState(
-                        crewman.name,
-                        crewman.job
-                    )
-                )
-            }
-        }
+        MovieDetailsCrewColumn(
+            crewman1 = crew[0],
+            crewman2 = crew[1]
+        )
+
+        MovieDetailsCrewColumn(
+            crewman1 = crew[2],
+            crewman2 = crew[3]
+        )
+
+        MovieDetailsCrewColumn(
+            crewman1 = crew[4],
+            crewman2 = crew[5]
+        )
+    }
+}
+
+@Composable
+fun MovieDetailsCrewColumn(
+    crewman1: CrewmanViewState,
+    crewman2: CrewmanViewState
+) {
+    Column(
+        Modifier
+            .padding(start = MaterialTheme.spacing.medium, end = MaterialTheme.spacing.large)
+    ) {
+        CrewItem(
+            item = CrewItemViewState(
+                name = crewman1.name,
+                job = crewman1.job
+            )
+        )
+
+        Spacer(Modifier.height(MaterialTheme.spacing.medium))
+
+        CrewItem(
+            item = CrewItemViewState(
+                name = crewman2.name,
+                job = crewman2.job
+            )
+        )
     }
 }
 
@@ -255,12 +280,12 @@ fun MovieDetailsCast(
                 key = { actor -> actor.id }
             ) { actor ->
                 ActorCard(
-                    item = ActorCardViewState(
-                        actor.id,
-                        actor.name,
-                        actor.character,
-                        actor.imageUrl
-                    )
+                    item = actor,
+                    modifier = Modifier
+                        .size(
+                            width = 125.dp,
+                            height = 209.dp
+                        )
                 )
             }
         }
