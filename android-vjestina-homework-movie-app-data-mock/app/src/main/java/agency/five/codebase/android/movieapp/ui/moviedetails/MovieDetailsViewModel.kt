@@ -12,14 +12,14 @@ import kotlinx.coroutines.launch
 
 class MovieDetailsViewModel(
     private val movieRepository: MovieRepository,
-    detailsMapper: MovieDetailsMapper,
+    movieDetailsMapper: MovieDetailsMapper,
     movieId: Int,
 ) : ViewModel() {
 
     val movieDetailsViewState: StateFlow<MovieDetailsViewState> =
         movieRepository
             .movieDetails(movieId)
-            .map { it -> detailsMapper.toMovieDetailsViewState(it) }
+            .map { movies -> movieDetailsMapper.toMovieDetailsViewState(movies) }
             .stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(5000),

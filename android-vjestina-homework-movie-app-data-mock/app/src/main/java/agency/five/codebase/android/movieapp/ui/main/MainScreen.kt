@@ -29,6 +29,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import org.koin.androidx.compose.getViewModel
+import org.koin.core.parameter.parametersOf
 
 @Composable
 fun MainScreen() {
@@ -85,6 +87,7 @@ fun MainScreen() {
             ) {
                 composable(NavigationItem.HomeDestination.route) {
                     HomeRoute(
+                        viewModel = getViewModel(),
                         onNavigateToMovieDetails = {
                             navController.navigate(
                                 MovieDetailsDestination.createNavigationRoute(it.id)
@@ -95,6 +98,7 @@ fun MainScreen() {
 
                 composable(NavigationItem.FavoritesDestination.route) {
                     FavoritesRoute(
+                        viewModel = getViewModel(),
                         onNavigateToMovieDetails = {
                             navController.navigate(
                                 MovieDetailsDestination.createNavigationRoute(it.id)
@@ -107,7 +111,13 @@ fun MainScreen() {
                     route = MovieDetailsDestination.route,
                     arguments = listOf(navArgument(MOVIE_ID_KEY) { type = NavType.IntType }),
                 ) {
-                    MovieDetailsRoute()
+                    MovieDetailsRoute(
+                        viewModel = getViewModel(parameters = {
+                            parametersOf(
+                                it.arguments?.getInt(MOVIE_ID_KEY)
+                            )
+                        })
+                    )
                 }
             }
         }

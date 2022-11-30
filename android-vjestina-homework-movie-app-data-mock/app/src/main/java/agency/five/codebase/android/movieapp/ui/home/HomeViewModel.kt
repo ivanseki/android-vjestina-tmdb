@@ -15,13 +15,13 @@ class HomeViewModel(
 ) : ViewModel() {
 
     private val popularMoviesCategorySelected: MutableStateFlow<MovieCategory> =
-        MutableStateFlow(MovieCategory.POPULAR_ON_TV)
+        MutableStateFlow(MovieCategory.POPULAR_STREAMING)
 
     private val nowPlayingMoviesCategorySelected: MutableStateFlow<MovieCategory> =
-        MutableStateFlow(MovieCategory.NOW_PLAYING_MOVIES)
+        MutableStateFlow(MovieCategory.NOW_PLAYING_TV)
 
     private val upcomingMoviesCategorySelected: MutableStateFlow<MovieCategory> =
-        MutableStateFlow(MovieCategory.UPCOMING_THIS_WEEK)
+        MutableStateFlow(MovieCategory.UPCOMING_TODAY)
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val popularMovies: StateFlow<HomeMovieCategoryViewState> =
