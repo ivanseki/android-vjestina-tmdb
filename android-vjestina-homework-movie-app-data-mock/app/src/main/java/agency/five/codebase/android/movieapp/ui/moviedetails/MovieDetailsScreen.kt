@@ -5,6 +5,7 @@ import agency.five.codebase.android.movieapp.mock.MoviesMock
 import agency.five.codebase.android.movieapp.ui.component.*
 import agency.five.codebase.android.movieapp.ui.moviedetails.mapper.MovieDetailsMapper
 import agency.five.codebase.android.movieapp.ui.moviedetails.mapper.MovieDetailsMapperImpl
+import agency.five.codebase.android.movieapp.ui.theme.MovieAppTheme
 import agency.five.codebase.android.movieapp.ui.theme.spacing
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
@@ -13,10 +14,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -27,34 +25,37 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-
-private val movieDetailsMapper: MovieDetailsMapper = MovieDetailsMapperImpl()
-
-val movieDetailsViewState = movieDetailsMapper.toMovieDetailsViewState(MoviesMock.getMovieDetails())
+import org.koin.androidx.compose.getViewModel
 
 @Composable
-fun MovieDetailsRoute() {
-    val movieDetailsViewState by remember { mutableStateOf(movieDetailsViewState) }
+fun MovieDetailsRoute(
+    viewModel: MovieDetailsViewModel
+) {
+    val movieDetailsViewState: MovieDetailsViewState by viewModel.movieDetailsViewState.collectAsState()
 
     MovieDetailsScreen(
-        movieDetailsViewState = movieDetailsViewState
+        movieDetailsViewState = movieDetailsViewState,
+        onFavoriteButtonClick = { movieId -> viewModel.toggleFavorite(movieId) }
     )
 }
 
 @Composable
 fun MovieDetailsScreen(
     modifier: Modifier = Modifier,
-    movieDetailsViewState: MovieDetailsViewState
+    movieDetailsViewState: MovieDetailsViewState,
+    onFavoriteButtonClick: (Int) -> Unit
 ) {
     Column(
         modifier = modifier
             .verticalScroll(state = rememberScrollState())
     ) {
         MovieDetailsHeader(
+            id = movieDetailsViewState.id,
             imageUrl = movieDetailsViewState.imageUrl,
             voteAverage = movieDetailsViewState.voteAverage,
             title = movieDetailsViewState.title,
-            isFavorite = movieDetailsViewState.isFavorite
+            isFavorite = movieDetailsViewState.isFavorite,
+            onFavoriteButtonClick = onFavoriteButtonClick
         )
 
         Spacer(
@@ -95,10 +96,12 @@ fun MovieDetailsScreen(
 fun MovieDetailsHeader(
     modifier: Modifier = Modifier
         .fillMaxWidth(),
+    id: Int,
     imageUrl: String?,
     voteAverage: Float,
     title: String,
-    isFavorite: Boolean
+    isFavorite: Boolean,
+    onFavoriteButtonClick: (Int) -> Unit
 ) {
     Box(
         modifier = modifier,
@@ -165,7 +168,7 @@ fun MovieDetailsHeader(
                     )
                     .size(30.dp),
                 isFavourite = isFavorite,
-                onClick = { }
+                onClick = { onFavoriteButtonClick(id) }
             )
         }
     }
@@ -310,5 +313,9 @@ fun MovieDetailsSectionHeader(
 @Preview(showBackground = false)
 @Composable
 private fun MovieDetailsScreenPreview() {
-    MovieDetailsScreen(movieDetailsViewState = movieDetailsViewState)
+    MovieAppTheme {
+        MovieDetailsRoute(
+            viewModel = getViewModel()
+        )
+    }
 }

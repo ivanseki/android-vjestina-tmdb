@@ -27,7 +27,7 @@ fun MovieCard(
     item: MovieCardViewState,
     modifier: Modifier = Modifier,
     onClick: () -> Unit = {},
-    onFavouriteButtonClick: () -> Unit
+    onFavouriteButtonClick: (Int) -> Unit
 ) {
     Card(
         modifier = modifier
@@ -47,7 +47,7 @@ fun MovieCard(
                     .padding(9.dp)
                     .size(30.dp),
                 isFavourite = item.isFavorite,
-                onClick = { onFavouriteButtonClick() }
+                onClick = { onFavouriteButtonClick }
             )
         }
     }
@@ -57,7 +57,8 @@ fun MovieCard(
 @Composable
 private fun MovieCardPreview() {
     val movie = MoviesMock.getMoviesList()[0]
-    val movieCardViewState = MovieCardViewState(id = movie.id, imageUrl = movie.imageUrl, isFavorite = movie.isFavorite)
+    val movieCardViewState =
+        MovieCardViewState(id = movie.id, imageUrl = movie.imageUrl, isFavorite = movie.isFavorite)
 
     val movieCardModifier = Modifier
         .width(122.dp)
