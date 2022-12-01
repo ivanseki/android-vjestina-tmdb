@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CardElevation
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -19,9 +18,10 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 
 data class ActorCardViewState(
-    val imageUrl: String?,
+    val id: Int,
     val name: String,
     val character: String,
+    val imageUrl: String?
 )
 
 @Composable
@@ -68,6 +68,7 @@ fun ActorCard(
 private fun ActorCardPreview() {
     val actor = MoviesMock.getActor()
     val item = ActorCardViewState(
+        id = actor.id,
         name = actor.name,
         imageUrl = actor.imageUrl,
         character = actor.character

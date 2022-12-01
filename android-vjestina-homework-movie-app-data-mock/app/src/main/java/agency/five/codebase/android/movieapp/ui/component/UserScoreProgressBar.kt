@@ -13,16 +13,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import agency.five.codebase.android.movieapp.R
 
 private const val SCORE_FORMAT = "%.1f"
 
 @Composable
 fun UserScoreProgressBar(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     score: Float,
     radius: Dp = 40.dp,
     colorProgressBar: Color = Color.Green,
@@ -70,8 +73,9 @@ fun UserScoreProgressBar(
 
         Text(
             text = SCORE_FORMAT.format(score * 10f),
-            fontSize = 15.sp,
-            color = Color.Black
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Bold,
+            color = colorResource(id = R.color.white)
         )
     }
 }
