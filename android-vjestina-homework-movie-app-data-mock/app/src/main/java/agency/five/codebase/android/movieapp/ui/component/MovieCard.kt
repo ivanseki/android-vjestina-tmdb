@@ -7,9 +7,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
@@ -47,7 +44,7 @@ fun MovieCard(
                     .padding(9.dp)
                     .size(30.dp),
                 isFavourite = item.isFavorite,
-                onClick = { onFavouriteButtonClick }
+                onClick = { onFavouriteButtonClick(item.id) }
             )
         }
     }

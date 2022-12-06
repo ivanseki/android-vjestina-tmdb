@@ -313,9 +313,10 @@ fun MovieDetailsSectionHeader(
 @Preview(showBackground = false)
 @Composable
 private fun MovieDetailsScreenPreview() {
-    MovieAppTheme {
-        MovieDetailsRoute(
-            viewModel = getViewModel()
-        )
-    }
+    val movieDetailsMapper: MovieDetailsMapper = MovieDetailsMapperImpl()
+
+    MovieDetailsScreen(
+        movieDetailsViewState = movieDetailsMapper.toMovieDetailsViewState(MoviesMock.getMovieDetails()),
+        onFavoriteButtonClick = { }
+    )
 }
