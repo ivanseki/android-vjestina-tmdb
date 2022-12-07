@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
@@ -30,7 +31,8 @@ fun FavoritesRoute(
     FavoritesScreen(
         favoritesViewState = favoritesViewState,
         onNavigateToMovieDetails = onNavigateToMovieDetails,
-        onFavoriteButtonClick = { movieId -> viewModel.toggleFavorite(movieId) }
+        onFavoriteButtonClick = { movieId -> viewModel.toggleFavorite(movieId) },
+        modifier = Modifier.fillMaxSize()
     )
 }
 
@@ -45,7 +47,8 @@ fun FavoritesScreen(
         columns = GridCells.Fixed(3),
         contentPadding = PaddingValues(horizontal = MaterialTheme.spacing.medium),
         horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small),
-        verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium)
+        verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium),
+        modifier = modifier
     ) {
         item(
             span = { GridItemSpan(maxLineSpan) }
@@ -73,7 +76,8 @@ fun FavoritesScreen(
                     isFavorite = movie.isFavorite
                 ),
                 onClick = { onNavigateToMovieDetails(movie) },
-                onFavouriteButtonClick = { onFavoriteButtonClick(movie.id) }
+                onFavouriteButtonClick = { onFavoriteButtonClick(movie.id) },
+                modifier = Modifier.height(154.dp)
             )
         }
     }

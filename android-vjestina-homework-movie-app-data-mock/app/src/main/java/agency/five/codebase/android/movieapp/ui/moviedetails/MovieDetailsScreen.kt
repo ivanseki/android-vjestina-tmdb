@@ -112,7 +112,7 @@ fun MovieDetailsHeader(
             contentScale = ContentScale.Crop,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(350.dp)
+                .fillMaxHeight()
                 .align(Alignment.TopCenter)
         )
 
@@ -208,23 +208,29 @@ fun MovieDetailsCrew(
     modifier: Modifier = Modifier,
     crew: List<CrewmanViewState>
 ) {
+    val initialCrewmanViewState = CrewmanViewState(
+        id = 1,
+        name = "",
+        job = ""
+    )
+
     Row(
         modifier = modifier,
         horizontalArrangement = Arrangement.SpaceAround
     ) {
         MovieDetailsCrewColumn(
-            crewman1 = crew[0],
-            crewman2 = crew[1]
+            crewman1 = crew.getOrElse(0) { initialCrewmanViewState },
+            crewman2 = crew.getOrElse(1) { initialCrewmanViewState }
         )
 
         MovieDetailsCrewColumn(
-            crewman1 = crew[2],
-            crewman2 = crew[3]
+            crewman1 = crew.getOrElse(2) { initialCrewmanViewState },
+            crewman2 = crew.getOrElse(3) { initialCrewmanViewState }
         )
 
         MovieDetailsCrewColumn(
-            crewman1 = crew[4],
-            crewman2 = crew[5]
+            crewman1 = crew.getOrElse(4) { initialCrewmanViewState },
+            crewman2 = crew.getOrElse(5) { initialCrewmanViewState }
         )
     }
 }
