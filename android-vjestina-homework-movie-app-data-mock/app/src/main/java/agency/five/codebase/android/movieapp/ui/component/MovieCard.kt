@@ -7,9 +7,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
@@ -27,7 +24,7 @@ fun MovieCard(
     item: MovieCardViewState,
     modifier: Modifier = Modifier,
     onClick: () -> Unit = {},
-    onFavouriteButtonClick: () -> Unit
+    onFavouriteButtonClick: (Int) -> Unit
 ) {
     Card(
         modifier = modifier
@@ -47,7 +44,7 @@ fun MovieCard(
                     .padding(9.dp)
                     .size(30.dp),
                 isFavourite = item.isFavorite,
-                onClick = { onFavouriteButtonClick() }
+                onClick = { onFavouriteButtonClick(item.id) }
             )
         }
     }
@@ -57,7 +54,8 @@ fun MovieCard(
 @Composable
 private fun MovieCardPreview() {
     val movie = MoviesMock.getMoviesList()[0]
-    val movieCardViewState = MovieCardViewState(id = movie.id, imageUrl = movie.imageUrl, isFavorite = movie.isFavorite)
+    val movieCardViewState =
+        MovieCardViewState(id = movie.id, imageUrl = movie.imageUrl, isFavorite = movie.isFavorite)
 
     val movieCardModifier = Modifier
         .width(122.dp)
