@@ -72,9 +72,11 @@ fun MovieDetailsScreen(
                 .height(MaterialTheme.spacing.medium)
         )
 
-        MovieDetailsCrew(
-            crew = movieDetailsViewState.crew
-        )
+        if (movieDetailsViewState.crew.isNotEmpty()) {
+            MovieDetailsCrew(
+                crew = movieDetailsViewState.crew
+            )
+        }
 
         Spacer(
             modifier = Modifier
@@ -208,29 +210,26 @@ fun MovieDetailsCrew(
     modifier: Modifier = Modifier,
     crew: List<CrewmanViewState>
 ) {
-    val initialCrewmanViewState = CrewmanViewState(
-        id = 1,
-        name = "",
-        job = ""
-    )
-
     Row(
         modifier = modifier,
         horizontalArrangement = Arrangement.SpaceAround
     ) {
+
         MovieDetailsCrewColumn(
-            crewman1 = crew.getOrElse(0) { initialCrewmanViewState },
-            crewman2 = crew.getOrElse(1) { initialCrewmanViewState }
+            crewman1 = crew[0],
+            crewman2 = crew[1]
         )
 
         MovieDetailsCrewColumn(
-            crewman1 = crew.getOrElse(2) { initialCrewmanViewState },
-            crewman2 = crew.getOrElse(3) { initialCrewmanViewState }
+            crewman1 = crew[2],
+            crewman2 = crew[3]
         )
 
         MovieDetailsCrewColumn(
-            crewman1 = crew.getOrElse(4) { initialCrewmanViewState },
-            crewman2 = crew.getOrElse(5) { initialCrewmanViewState }
+            crewman1 = crew[4],
+            crewman2 = if (crew.size == 6) {
+                crew[5]
+            } else null
         )
     }
 }
@@ -238,7 +237,7 @@ fun MovieDetailsCrew(
 @Composable
 fun MovieDetailsCrewColumn(
     crewman1: CrewmanViewState,
-    crewman2: CrewmanViewState
+    crewman2: CrewmanViewState?
 ) {
     Column(
         Modifier
@@ -253,12 +252,14 @@ fun MovieDetailsCrewColumn(
 
         Spacer(Modifier.height(MaterialTheme.spacing.medium))
 
-        CrewItem(
-            item = CrewItemViewState(
-                name = crewman2.name,
-                job = crewman2.job
+        if (crewman2 != null) {
+            CrewItem(
+                item = CrewItemViewState(
+                    name = crewman2.name,
+                    job = crewman2.job
+                )
             )
-        )
+        }
     }
 }
 
