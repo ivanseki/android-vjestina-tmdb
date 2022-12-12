@@ -9,6 +9,9 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ApiMovieDetails(
+    @SerialName("id")
+    val id: Int,
+
     @SerialName("original_language")
     val original_language: String,
 
