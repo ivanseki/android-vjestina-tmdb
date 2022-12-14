@@ -12,6 +12,15 @@ data class ApiMovieDetails(
     @SerialName("id")
     val id: Int,
 
+    @SerialName("title")
+    val title: String,
+
+    @SerialName("overview")
+    val overview: String,
+
+    @SerialName("poster_path")
+    val posterPath: String?,
+
     @SerialName("original_language")
     val original_language: String,
 
@@ -24,8 +33,14 @@ data class ApiMovieDetails(
     @SerialName("vote_average")
     val vote_average: Float
 ) {
-    fun toMovieDetails(movie: Movie, crew: List<Crewman>, cast: List<Actor>) = MovieDetails(
-        movie = movie,
+    fun toMovieDetails(isFavorite: Boolean, crew: List<Crewman>, cast: List<Actor>) = MovieDetails(
+        movie = Movie(
+            id = id,
+            title = title,
+            overview = overview,
+            imageUrl = posterPath,
+            isFavorite = isFavorite
+        ),
         voteAverage = vote_average,
         releaseDate = release_date,
         language = original_language,

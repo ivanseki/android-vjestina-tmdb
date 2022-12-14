@@ -1,7 +1,10 @@
 package agency.five.codebase.android.movieapp.data.repository
 
+import agency.five.codebase.android.movieapp.data.database.DbFavoriteMovie
 import agency.five.codebase.android.movieapp.data.database.FavoriteMovieDao
+import agency.five.codebase.android.movieapp.data.di.databaseModule
 import agency.five.codebase.android.movieapp.data.network.MovieService
+import agency.five.codebase.android.movieapp.data.network.model.ApiCrew
 import agency.five.codebase.android.movieapp.model.Movie
 import agency.five.codebase.android.movieapp.model.MovieCategory
 import agency.five.codebase.android.movieapp.model.MovieDetails
@@ -74,8 +77,8 @@ class MovieRepositoryImpl(
             .map { favoriteMovies ->
                 apiMovieDetails.toMovieDetails(
                     isFavorite = favoriteMovies.any { it.id == apiMovieDetails.id },
-                    crew = apiMovieCredits.crew,
-                    cast = apiMovieCredits.cast
+                    crew = apiMovieCredits.crew.map { crewman -> crewman.toCrewman() },
+                    cast = apiMovieCredits.cast.map { actor -> actor.toActor() }
                 )
             }
     }.flowOn(bgDispatcher)
@@ -84,7 +87,7 @@ class MovieRepositoryImpl(
 
     override suspend fun addMovieToFavorites(movieId: Int) {
         TODO("Not yet implemented")
-        //movieDao.insertFavorite(movieId)
+        //movieDao.insertFavorite()
     }
 
     override suspend fun removeMovieFromFavorites(movieId: Int) {
