@@ -18,15 +18,6 @@ data class ApiMovie(
 
     @SerialName("poster_path")
     val posterPath: String?,
-
-    @SerialName("genre_ids")
-    val genreIds: List<Int>,
-
-    @SerialName("vote_average")
-    val voteAverage: Double,
-
-    @SerialName("release_date")
-    val releaseDate: String? = null
 ) {
     fun toMovie(isFavorite: Boolean) = Movie(
         id = id,

@@ -72,7 +72,7 @@ fun UserScoreProgressBar(
         }
 
         Text(
-            text = SCORE_FORMAT.format(score * 10f),
+            text = SCORE_FORMAT.format(score),
             fontSize = 16.sp,
             fontWeight = FontWeight.Bold,
             color = colorResource(id = R.color.white)

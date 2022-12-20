@@ -28,7 +28,7 @@ class HomeViewModel(
         popularMoviesCategorySelected
             .flatMapLatest { selectedMovieCategory ->
                 movieRepository
-                    .popularMovies(movieCategory = selectedMovieCategory)
+                    .movies(movieCategory = selectedMovieCategory)
                     .map { movies ->
                         homeScreenMapper.toHomeMovieCategoryViewState(
                             movieCategories = listOf(
@@ -53,7 +53,7 @@ class HomeViewModel(
         nowPlayingMoviesCategorySelected
             .flatMapLatest { selectedMovieCategory ->
                 movieRepository
-                    .popularMovies(movieCategory = selectedMovieCategory)
+                    .movies(movieCategory = selectedMovieCategory)
                     .map { movies ->
                         homeScreenMapper.toHomeMovieCategoryViewState(
                             movieCategories = listOf(
@@ -76,7 +76,7 @@ class HomeViewModel(
         upcomingMoviesCategorySelected
             .flatMapLatest { selectedMovieCategory ->
                 movieRepository
-                    .popularMovies(movieCategory = selectedMovieCategory)
+                    .movies(movieCategory = selectedMovieCategory)
                     .map { movies ->
                         homeScreenMapper.toHomeMovieCategoryViewState(
                             movieCategories = listOf(

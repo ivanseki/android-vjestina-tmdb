@@ -1,5 +1,6 @@
 package agency.five.codebase.android.movieapp.data.network.model
 
+import agency.five.codebase.android.movieapp.data.network.BASE_IMAGE_URL
 import agency.five.codebase.android.movieapp.model.Actor
 import agency.five.codebase.android.movieapp.model.Crewman
 import agency.five.codebase.android.movieapp.model.Movie
@@ -38,7 +39,7 @@ data class ApiMovieDetails(
             id = id,
             title = title,
             overview = overview,
-            imageUrl = posterPath,
+            imageUrl = "$BASE_IMAGE_URL/$posterPath",
             isFavorite = isFavorite
         ),
         voteAverage = vote_average,

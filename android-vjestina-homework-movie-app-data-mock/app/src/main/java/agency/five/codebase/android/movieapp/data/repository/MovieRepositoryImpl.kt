@@ -2,15 +2,14 @@ package agency.five.codebase.android.movieapp.data.repository
 
 import agency.five.codebase.android.movieapp.data.database.DbFavoriteMovie
 import agency.five.codebase.android.movieapp.data.database.FavoriteMovieDao
-import agency.five.codebase.android.movieapp.data.di.databaseModule
 import agency.five.codebase.android.movieapp.data.network.MovieService
-import agency.five.codebase.android.movieapp.data.network.model.ApiCrew
 import agency.five.codebase.android.movieapp.model.Movie
 import agency.five.codebase.android.movieapp.model.MovieCategory
 import agency.five.codebase.android.movieapp.model.MovieDetails
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.runBlocking
 
 class MovieRepositoryImpl(
     private val movieService: MovieService,
@@ -22,15 +21,13 @@ class MovieRepositoryImpl(
         .associateWith { movieCategory ->
             flow {
                 val movieResponse = when (movieCategory) {
-                    MovieCategory.POPULAR_STREAMING,
-                    MovieCategory.POPULAR_ON_TV,
-                    MovieCategory.POPULAR_FOR_RENT,
-                    MovieCategory.POPULAR_IN_THEATRES -> movieService.fetchPopularMovies()
-
-                    MovieCategory.NOW_PLAYING_MOVIES,
+                    MovieCategory.POPULAR_STREAMING -> movieService.fetchPopularMovies()
+                    MovieCategory.POPULAR_ON_TV -> movieService.fetchNowPlayingMovies()
+                    MovieCategory.POPULAR_FOR_RENT-> movieService.fetchUpcomingMovies()
+                    MovieCategory.POPULAR_IN_THEATRES -> movieService.fetchTopRatedMovies()
+                    MovieCategory.NOW_PLAYING_MOVIES -> movieService.fetchPopularMovies()
                     MovieCategory.NOW_PLAYING_TV -> movieService.fetchNowPlayingMovies()
-
-                    MovieCategory.UPCOMING_TODAY,
+                    MovieCategory.UPCOMING_TODAY -> movieService.fetchPopularMovies()
                     MovieCategory.UPCOMING_THIS_WEEK -> movieService.fetchUpcomingMovies()
                 }
                 emit(movieResponse.movies)
@@ -86,15 +83,42 @@ class MovieRepositoryImpl(
     override fun favoriteMovies(): Flow<List<Movie>> = favorites
 
     override suspend fun addMovieToFavorites(movieId: Int) {
-        TODO("Not yet implemented")
-        //movieDao.insertFavorite()
+        runBlocking(bgDispatcher) {
+            movieDao.insertFavorite(
+                favoriteMovie = DbFavoriteMovie(
+                    movieId,
+                    movieService.fetchMovieDetails(movieId).posterPath
+                )
+            )
+        }
     }
 
     override suspend fun removeMovieFromFavorites(movieId: Int) {
-        TODO("Not yet implemented")
+        runBlocking(bgDispatcher) {
+            movieDao.deleteFavorite(movieId)
+        }
+    }
+
+    private suspend fun findMovie(movieId: Int): Movie? {
+        var movie: Movie? = null
+        moviesByCategory.values.forEach { value ->
+            val movies = value.first()
+            movies.forEach {
+                if (it.id == movieId)
+                    movie = it
+            }
+        }
+        return movie
     }
 
     override suspend fun toggleFavorite(movieId: Int) {
-        TODO("Not yet implemented")
+        runBlocking(bgDispatcher) {
+            val movie = findMovie(movieId)
+            if (movie?.isFavorite == true) {
+                removeMovieFromFavorites(movieId)
+            } else {
+                addMovieToFavorites(movieId)
+            }
+        }
     }
 }

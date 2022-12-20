@@ -5,7 +5,7 @@ import androidx.room.Room
 import org.koin.android.ext.koin.androidApplication
 import org.koin.dsl.module
 
-private const val APP_DATABASE_NAME = "tmdb_database"
+private const val APP_DATABASE_NAME = "app_database.db"
 
 val databaseModule = module {
     single {
@@ -14,5 +14,9 @@ val databaseModule = module {
             MovieAppDatabase::class.java,
             APP_DATABASE_NAME,
         ).build()
+    }
+
+    single {
+        get<MovieAppDatabase>().favoriteMovieDao()
     }
 }
