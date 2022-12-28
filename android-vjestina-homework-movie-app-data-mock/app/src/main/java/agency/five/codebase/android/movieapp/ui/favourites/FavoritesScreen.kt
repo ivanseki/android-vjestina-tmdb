@@ -70,14 +70,13 @@ fun FavoritesScreen(
             key = { movie -> movie.id }
         ) { movie ->
             MovieCard(
-                item = MovieCardViewState(
-                    id = movie.id,
-                    imageUrl = movie.imageUrl,
-                    isFavorite = movie.isFavorite
-                ),
+                item = movie,
                 onClick = { onNavigateToMovieDetails(movie) },
                 onFavouriteButtonClick = { onFavoriteButtonClick(movie.id) },
-                modifier = Modifier.height(154.dp)
+                modifier = Modifier.size(
+                    width = 105.dp,
+                    height = 154.dp
+                )
             )
         }
     }

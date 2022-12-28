@@ -2,6 +2,7 @@ package agency.five.codebase.android.movieapp.data.repository
 
 import agency.five.codebase.android.movieapp.data.database.DbFavoriteMovie
 import agency.five.codebase.android.movieapp.data.database.FavoriteMovieDao
+import agency.five.codebase.android.movieapp.data.network.BASE_IMAGE_URL
 import agency.five.codebase.android.movieapp.data.network.MovieService
 import agency.five.codebase.android.movieapp.model.Movie
 import agency.five.codebase.android.movieapp.model.MovieCategory
@@ -23,7 +24,7 @@ class MovieRepositoryImpl(
                 val movieResponse = when (movieCategory) {
                     MovieCategory.POPULAR_STREAMING -> movieService.fetchPopularMovies()
                     MovieCategory.POPULAR_ON_TV -> movieService.fetchNowPlayingMovies()
-                    MovieCategory.POPULAR_FOR_RENT-> movieService.fetchUpcomingMovies()
+                    MovieCategory.POPULAR_FOR_RENT -> movieService.fetchUpcomingMovies()
                     MovieCategory.POPULAR_IN_THEATRES -> movieService.fetchTopRatedMovies()
                     MovieCategory.NOW_PLAYING_MOVIES -> movieService.fetchPopularMovies()
                     MovieCategory.NOW_PLAYING_TV -> movieService.fetchNowPlayingMovies()
@@ -86,8 +87,8 @@ class MovieRepositoryImpl(
         runBlocking(bgDispatcher) {
             movieDao.insertFavorite(
                 favoriteMovie = DbFavoriteMovie(
-                    movieId,
-                    movieService.fetchMovieDetails(movieId).posterPath
+                    id = movieId,
+                    posterUrl = BASE_IMAGE_URL + movieService.fetchMovieDetails(movieId).posterPath
                 )
             )
         }

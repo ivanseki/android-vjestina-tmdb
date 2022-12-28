@@ -29,13 +29,13 @@ fun UserScoreProgressBar(
     score: Float,
     radius: Dp = 40.dp,
     colorProgressBar: Color = Color.Green,
-    colorProgressBarBackground: Color = Color(0xFFC7F3C4),
+    colorProgressBarBackground: Color = Color(0xFFC1E4BF),
     strokeWidth: Dp = 8.dp,
     animDuration: Int = 1000
 ) {
     val animationPlayed = remember { mutableStateOf(false) }
     val currentPercentage = animateFloatAsState(
-        targetValue = (if (animationPlayed.value) score else 0f),
+        targetValue = (if (animationPlayed.value) score/10f else 0f),
         animationSpec = tween(
             durationMillis = animDuration
         )
@@ -83,5 +83,5 @@ fun UserScoreProgressBar(
 @Preview(showBackground = true)
 @Composable
 fun UserScoreProgressBarPreview() {
-    UserScoreProgressBar(score = 0.75f, modifier = Modifier)
+    UserScoreProgressBar(score = 8.1f, modifier = Modifier)
 }

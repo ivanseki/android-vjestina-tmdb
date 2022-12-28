@@ -27,6 +27,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 
+private const val NUMBER_OF_CREW_TO_DISPLAY: Int = 6
+
 @Composable
 fun MovieDetailsRoute(
     viewModel: MovieDetailsViewModel
@@ -210,55 +212,48 @@ fun MovieDetailsCrew(
     modifier: Modifier = Modifier,
     crew: List<CrewmanViewState>
 ) {
+    val crewToDisplay = crew
+        .take(NUMBER_OF_CREW_TO_DISPLAY)
+        .chunked(NUMBER_OF_CREW_TO_DISPLAY / 2)
+        .let {
+            val firstRow = it.firstOrNull() ?: emptyList()
+            val secondRow = it.getOrNull(1) ?: emptyList()
+
+            firstRow.mapIndexed { index, crewman ->
+                crewman to secondRow.getOrNull(index)
+            }
+        }
+
     Row(
         modifier = modifier,
         horizontalArrangement = Arrangement.SpaceAround
     ) {
-
-        MovieDetailsCrewColumn(
-            crewman1 = crew[0],
-            crewman2 = crew[1]
-        )
-
-        MovieDetailsCrewColumn(
-            crewman1 = crew[2],
-            crewman2 = crew[3]
-        )
-
-        MovieDetailsCrewColumn(
-            crewman1 = crew[4],
-            crewman2 = if (crew.size == 6) {
-                crew[5]
-            } else null
-        )
-    }
-}
-
-@Composable
-fun MovieDetailsCrewColumn(
-    crewman1: CrewmanViewState,
-    crewman2: CrewmanViewState?
-) {
-    Column(
-        Modifier
-            .padding(start = MaterialTheme.spacing.medium, end = MaterialTheme.spacing.large)
-    ) {
-        CrewItem(
-            item = CrewItemViewState(
-                name = crewman1.name,
-                job = crewman1.job
-            )
-        )
-
-        Spacer(Modifier.height(MaterialTheme.spacing.medium))
-
-        if (crewman2 != null) {
-            CrewItem(
-                item = CrewItemViewState(
-                    name = crewman2.name,
-                    job = crewman2.job
+        crewToDisplay.forEachIndexed { index, crewmanPair ->
+            Column(
+                Modifier
+                    .weight(1f)
+                    .padding(
+                        start = if (index == 0) MaterialTheme.spacing.medium else 0.dp,
+                        end = MaterialTheme.spacing.medium
+                    )
+            ) {
+                CrewItem(
+                    item = CrewItemViewState(
+                        name = crewmanPair.first.name,
+                        job = crewmanPair.first.job
+                    )
                 )
-            )
+
+                crewmanPair.second?.let {
+                    Spacer(Modifier.height(26.dp))
+                    CrewItem(
+                        item = CrewItemViewState(
+                            name = crewmanPair.second!!.name,
+                            job = crewmanPair.second!!.job
+                        )
+                    )
+                }
+            }
         }
     }
 }
