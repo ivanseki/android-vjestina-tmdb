@@ -8,6 +8,8 @@ buildscript {
         nav_version = "2.5.3"
         koin_version = "3.3.0"
         koin_compose_version = "3.3.0"
+        ktor_version = "2.2.1"
+        room_version = "2.4.3"
     }
     repositories {
         google()

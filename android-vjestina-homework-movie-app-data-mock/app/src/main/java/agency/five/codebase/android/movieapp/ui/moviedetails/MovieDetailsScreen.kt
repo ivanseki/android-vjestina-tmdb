@@ -5,7 +5,6 @@ import agency.five.codebase.android.movieapp.mock.MoviesMock
 import agency.five.codebase.android.movieapp.ui.component.*
 import agency.five.codebase.android.movieapp.ui.moviedetails.mapper.MovieDetailsMapper
 import agency.five.codebase.android.movieapp.ui.moviedetails.mapper.MovieDetailsMapperImpl
-import agency.five.codebase.android.movieapp.ui.theme.MovieAppTheme
 import agency.five.codebase.android.movieapp.ui.theme.spacing
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
@@ -14,7 +13,9 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -25,7 +26,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import org.koin.androidx.compose.getViewModel
+
+private const val NUMBER_OF_CREW_TO_DISPLAY: Int = 6
 
 @Composable
 fun MovieDetailsRoute(
@@ -72,9 +74,11 @@ fun MovieDetailsScreen(
                 .height(MaterialTheme.spacing.medium)
         )
 
-        MovieDetailsCrew(
-            crew = movieDetailsViewState.crew
-        )
+        if (movieDetailsViewState.crew.isNotEmpty()) {
+            MovieDetailsCrew(
+                crew = movieDetailsViewState.crew
+            )
+        }
 
         Spacer(
             modifier = Modifier
@@ -208,57 +212,49 @@ fun MovieDetailsCrew(
     modifier: Modifier = Modifier,
     crew: List<CrewmanViewState>
 ) {
-    val initialCrewmanViewState = CrewmanViewState(
-        id = 1,
-        name = "",
-        job = ""
-    )
+    val crewToDisplay = crew
+        .take(NUMBER_OF_CREW_TO_DISPLAY)
+        .chunked(NUMBER_OF_CREW_TO_DISPLAY / 2)
+        .let {
+            val firstRow = it.firstOrNull() ?: emptyList()
+            val secondRow = it.getOrNull(1) ?: emptyList()
+
+            firstRow.mapIndexed { index, crewman ->
+                crewman to secondRow.getOrNull(index)
+            }
+        }
 
     Row(
         modifier = modifier,
         horizontalArrangement = Arrangement.SpaceAround
     ) {
-        MovieDetailsCrewColumn(
-            crewman1 = crew.getOrElse(0) { initialCrewmanViewState },
-            crewman2 = crew.getOrElse(1) { initialCrewmanViewState }
-        )
+        crewToDisplay.forEachIndexed { index, crewmanPair ->
+            Column(
+                Modifier
+                    .weight(1f)
+                    .padding(
+                        start = if (index == 0) MaterialTheme.spacing.medium else 0.dp,
+                        end = MaterialTheme.spacing.medium
+                    )
+            ) {
+                CrewItem(
+                    item = CrewItemViewState(
+                        name = crewmanPair.first.name,
+                        job = crewmanPair.first.job
+                    )
+                )
 
-        MovieDetailsCrewColumn(
-            crewman1 = crew.getOrElse(2) { initialCrewmanViewState },
-            crewman2 = crew.getOrElse(3) { initialCrewmanViewState }
-        )
-
-        MovieDetailsCrewColumn(
-            crewman1 = crew.getOrElse(4) { initialCrewmanViewState },
-            crewman2 = crew.getOrElse(5) { initialCrewmanViewState }
-        )
-    }
-}
-
-@Composable
-fun MovieDetailsCrewColumn(
-    crewman1: CrewmanViewState,
-    crewman2: CrewmanViewState
-) {
-    Column(
-        Modifier
-            .padding(start = MaterialTheme.spacing.medium, end = MaterialTheme.spacing.large)
-    ) {
-        CrewItem(
-            item = CrewItemViewState(
-                name = crewman1.name,
-                job = crewman1.job
-            )
-        )
-
-        Spacer(Modifier.height(MaterialTheme.spacing.medium))
-
-        CrewItem(
-            item = CrewItemViewState(
-                name = crewman2.name,
-                job = crewman2.job
-            )
-        )
+                crewmanPair.second?.let {
+                    Spacer(Modifier.height(26.dp))
+                    CrewItem(
+                        item = CrewItemViewState(
+                            name = crewmanPair.second!!.name,
+                            job = crewmanPair.second!!.job
+                        )
+                    )
+                }
+            }
+        }
     }
 }
 
